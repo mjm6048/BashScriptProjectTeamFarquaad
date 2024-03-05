@@ -6,13 +6,13 @@ if [ ! -d "./Output" ]; then
 fi
 
 function ProcessMetrics(){
-    ps -e -o comm,%cpu,%mem | grep -v "0.0  0.0" | while read -r line comm cpu mem
+    ps -e -o comm,%cpu,%mem | grep -v "0.0  0.0" | while read -r comm cpu mem
     do
         if [ ! -f "./Output/$comm.csv" ]; then  
-            "Process,%CPU,%MEM" > ./Output/$comm.csv
-            echo $line >> ./Output/$comm.csv
+            echo "Seconds,%CPU,%MEM" > ./Output/$comm.csv
+            echo "$1,$cpu,$mem" >> ./Output/$comm.csv
         else 
-            echo $line >> ./Output/$comm.csv
+            echo "$1,$cpu,$mem" >> ./Output/$comm.csv
 
         fi
     done
