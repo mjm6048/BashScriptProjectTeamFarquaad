@@ -1,10 +1,5 @@
 #! /usr/bin/env bash
 
-# if [ ! -d "./Output" ]; then
-#     echo "Hi"
-#     mkdir Output
-# fi
-
 function cleanUpOutput(){
 if [ ! -d "./Output" ]; then
     mkdir Output
@@ -33,12 +28,32 @@ function SystemMetrics(){
     echo "$1,$rx,$tx,$diskwrites,$diskcapacity" >> ./Output/system_metrics.csv
 }
 
+function spawnProcesses(){
+    ipAddress=172.16.1.37
+    echo "Spawning processes"
+    ./Processes/bandwidth_hog "$ipAddress"
 
+    ./Processes/bandwidth_hog_burst "$ipAddress"
+
+    ./Processes/cpu_hog "$ipAddress"
+
+    ./Processes/disk_hog "$ipAddress"
+
+    ./Processes/memory_hog "$ipAddress"
+
+    ./Processes/memory_hog_leak "$ipAddress"
+}
+
+function cleanup(){
+    trap spawnProcesses EXIT
+    echo "Performing cleanup"
+}
 
 endTime=$(($1*60))
 timer=0
 cleanUpOutput
 echo "seconds,rx data rate,tx data rate,disk writes,available disk capacity" > ./Output/system_metrics.csv
+cleanup
 while [ $timer -lt $endTime ]
 do  
     ProcessMetrics $timer
