@@ -14,7 +14,7 @@ function ProcessMetrics(){
     do
         if [ ! -f "./Output/${comm}_metrics.csv" ]; then  
             echo "seconds,%CPU,%memory" > ./Output/${comm}_metrics.csv
-            echo "$1,$cpu,$mem" >> ./Output/${comm}_metric.csv
+            echo "$1,$cpu,$mem" >> ./Output/${comm}_metrics.csv
         else 
             echo "$1,$cpu,$mem" >> ./Output/${comm}_metrics.csv
         fi
